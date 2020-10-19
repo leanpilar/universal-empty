@@ -15,7 +15,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/apps/front",
+            "outputPath": "dist/apps/front/browser",
             "index": "apps/front/src/index.html",
             "main": "apps/front/src/main.ts",
             "polyfills": "apps/front/src/polyfills.ts",
@@ -80,7 +80,8 @@
             "tsConfig": [
               "apps/front/tsconfig.app.json",
               "apps/front/tsconfig.spec.json",
-              "apps/front/tsconfig.editor.json"
+              "apps/front/tsconfig.editor.json",
+              "apps/front/tsconfig.server.json"
             ],
             "exclude": ["**/node_modules/**", "!apps/front/**/*"]
           }
@@ -90,6 +91,27 @@
           "options": {
             "jestConfig": "apps/front/jest.config.js",
             "passWithNoTests": true
+          }
+        },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/apps/front/server",
+            "main": "apps/front/src/main.server.ts",
+            "tsConfig": "apps/front/tsconfig.server.json"
+          },
+          "configurations": {
+            "production": {
+              "outputHashing": "media",
+              "fileReplacements": [
+                {
+                  "replace": "apps/front/src/environments/environment.ts",
+                  "with": "apps/front/src/environments/environment.prod.ts"
+                }
+              ],
+              "sourceMap": false,
+              "optimization": true
+            }
           }
         }
       }
@@ -195,6 +217,60 @@
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/api-interfaces/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "front-ssr": {
+      "root": "apps/front-ssr",
+      "sourceRoot": "apps/front-ssr/src",
+      "projectType": "application",
+      "prefix": "front-ssr",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "options": {
+            "outputPath": "dist/apps/front-ssr",
+            "main": "apps/front-ssr/src/main.ts",
+            "tsConfig": "apps/front-ssr/tsconfig.app.json",
+            "assets": ["apps/front-ssr/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/front-ssr/src/environments/environment.ts",
+                  "with": "apps/front-ssr/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "front-ssr:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/front-ssr/tsconfig.app.json",
+              "apps/front-ssr/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/front-ssr/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/front-ssr/jest.config.js",
             "passWithNoTests": true
           }
         }

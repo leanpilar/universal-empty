@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "emitDecoratorMetadata": true,
+    "outDir": "../../dist/out-tsc",
+    "baseUrl": "./apps/front/src/app/",
+    "paths": {
+      "./*": ["apps/front/src/app/*"]
+    },
+    "types": ["node"]
+  },
+  "exclude": ["**/*.spec.ts"],
+  "include": ["**/*.ts"]
+}
