@@ -176,7 +176,10 @@
           "builder": "@nrwl/node:execute",
           "options": {
             "buildTarget": "api:build"
-          }
+          },
+          "externalDependencies": [
+            "none"
+          ]
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
@@ -239,7 +242,7 @@
           },
           "configurations": {
             "production": {
-              "optimization": true,
+              "optimization": false,
               "extractLicenses": true,
               "inspect": false,
               "fileReplacements": [
